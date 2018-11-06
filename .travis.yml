@@ -1,0 +1,56 @@
+sudo: required
+
+services:
+  - docker
+
+env:
+  global:
+    - VERSION=3.0.0.18110201
+    - DOCKER_USERNAME=crazymax
+    - DOCKER_REPONAME=syspass
+    - QUAY_USERNAME=crazymax
+    - QUAY_REPONAME=syspass
+    - secure: FY0dzByGWqETL4VdUtqULHE8/WOQDFjhYV62zALO6ZNN9GRFfkXS0mWa3H2rmmPfJ/njpqcBiXcM/TOEJwiAKItoNAhAWT2ty9Rihc6/TwSwd95uT0w1Ah+vWhJLC/hOBiXsPz74wockfyJCH8+JNPmVQqS4BxWFGRFjSB3OxLGwwg7RqBG9xzshu9+1geCH+9RbVGScYb7c7yoKHxhtiWzXL/oEgQCrXO6TNZ6eIsquhofbM5TtTFBM5X9F2Zu8RT44GXIUacoxwca5LnvQETVcaN8pTN0YrJ3JX45QfUX2HFREOk6UIMbRTkkSMILoju76BBrWenF8X8N2eDlajIKs+mxaayHqLflOgJXzrCMzdctC0AvkhqzhZcO07rKugYWU2O+UMH3Rj4m2VuPX6xx8mBEAN1GLW/+b9cDqLjOZWnENgbCkIn3C/CnPtUKpl8Jvz3YIqIZCZUVrBoDiFUkbo99oZU4xSPWanj82ibYrrJCG6udrVd+yV2UCQruezjvWB9CtnnCDN3AjXTezNWTp672+05z/ULx+v9h9MNXpre7B+Zn2Xg/aybvTcwPuCNkSfh/JQ+GtewP8END+LtB6GCTIQD5PMYGvZV52H+y+oNz8e+jCdjytY6JTVHUw2r5kdwNNinT68a2BaEcSUOew+dxk/oAZGsfvV2CAdeA= # DOCKER_PASSWORD
+    - secure: xH1uxln8ve4h/zDgiLZrmIUl3tsQUmCilYzfxhuOlrmUzaJVxxR9q0cGZErKyBhxFEQ12GBjIJC4S/BDPL8BpnCtHO2ObZMNqYNAlQCsugwLR86lG8TkOjwprIHRnGVWhrcnzhG5jcO67kDQOrQzifkLRCuiouT1YKfqxpfiFIeIjqnFdixuG/XBk5tIqo4bQ7/WcO1RTElv7ldddcJd1lF6d1D+qfyoy331KSm14IVLUoBaDki6vqNPpriQS1meHPwPTOu2M5haf6wAf3TAMptxGVixIo0O32soVha6hlQODUuDq4C/ulQMWdo7lSKt9Nt+GfpyCsQ8NGuXwWlZ/3Fgf/wfjl2E5SQa2wZHa58Qbcw2/zo+/8cdHHlRupo3a6emIjlpEpgL789hLzNJzRwomuLqjZnIc+tXPWQ0AHT2O4+MJUCCeSiyamr7OT+Bl+wHgNI1HwQbPs3HSGiYENYCo1mzj7bJPqfT0vgKaFfoqqNrYm3Pvv33ILvmldatVFOj0xB1IERj/b74q2y+gBu3liDqfWMTYF3ZI7BLI/WraOcOOP73NYsME8IdFgT/w51P6SLB/3QKXiEZJ3I7MlmZXmvmQE7YXEB5IF8t5b0tSlLSgnpXqCRAvXMkcQGgv/mdT+gHPqVIEBRUkyOTS6DAFkk88MQn/w5I0uuFAKQ= # QUAY_PASSWORD
+
+before_install:
+  - sudo apt-get update
+  - docker --version
+  - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+  - export DOCKER_TAG=$(if [ "$BRANCH" == "master" ]; then echo "latest"; else echo $BRANCH; fi)
+  - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$PR, BRANCH=$BRANCH, DOCKER_TAG=$DOCKER_TAG"
+
+install:
+  - |
+    docker build --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
+    --build-arg VCS_REF=${TRAVIS_COMMIT::8} \
+    --build-arg VERSION=${VERSION} \
+    -t docker_build .
+
+before_script:
+  - docker run -d --name $DOCKER_REPONAME docker_build
+  - sleep 10
+  - docker logs $DOCKER_REPONAME
+
+script:
+  - docker ps | grep $DOCKER_REPONAME
+
+after_success:
+  - |
+    test $TRAVIS_PULL_REQUEST = false \
+    && echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin \
+    && docker tag docker_build $DOCKER_USERNAME/$DOCKER_REPONAME:$DOCKER_TAG \
+    && docker tag docker_build $DOCKER_USERNAME/$DOCKER_REPONAME:$VERSION \
+    && docker push $DOCKER_USERNAME/$DOCKER_REPONAME \
+    && echo "$QUAY_PASSWORD" | docker login quay.io --username "$QUAY_USERNAME" --password-stdin \
+    && docker tag docker_build quay.io/$DOCKER_USERNAME/$DOCKER_REPONAME:$DOCKER_TAG \
+    && docker tag docker_build quay.io/$DOCKER_USERNAME/$DOCKER_REPONAME:$VERSION \
+    && docker push quay.io/$QUAY_USERNAME/$QUAY_REPONAME
+
+branches:
+  except:
+    - /^[0-9]/
+
+notifications:
+  webhooks:
+    secure: ah2dXj6hhMOAQiT8jK9ZXSGMM5ZHQLvv6a3MRiPJla5C29H4XZyf8snimG1l7T0Z75otelILmfgDJii8vpXcn2ptl5valND3TKzONvx3llW4Fa9AA+fxbQd2dOjeX9/9/VHV8pm/K88p1nrxietVVP9zOG3Vtzc1nzcjtj29l+945xvOUXSjXA6F4lDlZeF67wrNeHonwoKoK0V7Lr+D/sN5gpAt0DdQ/GjmJJMZfLhojq4OUM46n7THuL9HSm4VWHDh3jlfvDJ3fANat7yKkrmyATQVIt7ESvXG4zwTCmxkRTVqefg85rWkJgu1h++3/lj6c+qBV6Zm5/c66am4hkhw0GOXImUZb7Z1FMVUgh+nWKmX4sgbMj2pa44BwPeZIWEiISrMFfZu6EgSFE2tY6Jr8tLpLe0NRITIvVl63ogFwih26guC02eoZM5Uw5QO0z+acZwx+hnRZ0ZAsnzdSw7c8uywaG3x4NXaHSXsq9KJArjWGK4n7avOt8I8TLTZW6S1NVXtYSbGl+Q6+fuajgExbTZY6mAqQf6R1z4ar4yXJZ4xJQsRGfD8vn+OWil5nhw3M2ATFHtrf+8h9uZro1axRozpf9TE3n6BtGR4XxnBC9v4+g1Ypd/CmO+Snd48WwNhbsix9MFoSvLzIosEZoUGYa7F+ekqIVzm6ne4G/c=
