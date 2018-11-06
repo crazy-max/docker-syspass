@@ -34,7 +34,7 @@ services:
   db:
     image: mariadb:10.2
     volumes:
-      - "db:/var/lib/mysql"
+      - "./db:/var/lib/mysql"
     environment:
       - "MYSQL_ALLOW_EMPTY_PASSWORD=yes"
       - "MYSQL_DATABASE=syspass"
@@ -44,7 +44,8 @@ services:
 
   syspass:
     image: crazymax/syspass:latest
-    container_name: syspass
+    depends_on:
+      - db
     volumes:
       - "./data:/data"
     labels:
