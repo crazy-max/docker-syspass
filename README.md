@@ -61,13 +61,25 @@ docker-compose logs -f
 
 ### Command line
 
-You can also use the following minimal command :
+You can also use the following commands :
 
 ```bash
-docker run -d -p 80:80 --name syspass \
+docker run -d --name syspass-db -h syspass-db \
+  -e "MYSQL_ALLOW_EMPTY_PASSWORD=yes" \
+  -e "MYSQL_DATABASE=syspass" \
+  -e "MYSQL_USER=syspass" \
+  -e "MYSQL_PASSWORD=syspass" \
+  mariadb:10.2
+```
+
+```bash
+docker run -d -p 80:80 --name syspass -h syspass \
+  --link syspass-db \
   -v $(pwd)/data:/data \
   crazymax/syspass:latest
 ```
+
+> Use `syspass-db` as database host in the installation wizard with this example
 
 ## Notes
 
