@@ -64,7 +64,7 @@ docker-compose logs -f
 You can also use the following commands :
 
 ```bash
-docker run -d --name syspass-db -h syspass-db \
+docker run -d --name syspass-db \
   -e "MYSQL_ALLOW_EMPTY_PASSWORD=yes" \
   -e "MYSQL_DATABASE=syspass" \
   -e "MYSQL_USER=syspass" \
@@ -73,7 +73,7 @@ docker run -d --name syspass-db -h syspass-db \
 ```
 
 ```bash
-docker run -d -p 80:80 --name syspass -h syspass \
+docker run -d -p 80:80 --name syspass \
   --link syspass-db \
   -v $(pwd)/data:/data \
   crazymax/syspass:latest
@@ -85,7 +85,7 @@ docker run -d -p 80:80 --name syspass -h syspass \
 
 ### Installation wizard
 
-You have to check [Hosting Mode](https://doc.syspass.org/en/installing/hostingmode.html) in the installation wizard.
+You have to check [Hosting Mode](https://doc.syspass.org/en/installing/hostingmode.html) in the installation wizard to skip database and user creation if you use MariaDB's Docker image.
 
 ## How can I help ?
 
