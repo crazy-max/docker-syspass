@@ -6,6 +6,7 @@
   <a href="https://hub.docker.com/r/crazymax/syspass/"><img src="https://img.shields.io/docker/stars/crazymax/syspass.svg?style=flat-square" alt="Docker Stars"></a>
   <a href="https://hub.docker.com/r/crazymax/syspass/"><img src="https://img.shields.io/docker/pulls/crazymax/syspass.svg?style=flat-square" alt="Docker Pulls"></a>
   <a href="https://quay.io/repository/crazymax/syspass"><img src="https://quay.io/repository/crazymax/syspass/status?style=flat-square" alt="Docker Repository on Quay"></a>
+  <a href="https://www.codacy.com/app/crazy-max/docker-syspass"><img src="https://img.shields.io/codacy/grade/583373a748d24c868a4809caace825bd.svg?style=flat-square" alt="Code Quality"></a>
   <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=CPB3K38DL665W"><img src="https://img.shields.io/badge/donate-paypal-7057ff.svg?style=flat-square" alt="Donate Paypal"></a>
 </p>
 
