@@ -7,7 +7,7 @@ ARG VERSION
 LABEL maintainer="CrazyMax" \
   org.label-schema.build-date=$BUILD_DATE \
   org.label-schema.name="syspass" \
-  org.label-schema.description="sysPass based on Alpine Linux" \
+  org.label-schema.description="sysPass" \
   org.label-schema.version=$VERSION \
   org.label-schema.url="https://github.com/crazy-max/docker-syspass" \
   org.label-schema.vcs-ref=$VCS_REF \
@@ -55,7 +55,7 @@ RUN apk --update --no-cache add \
   && sed -i -e "s/;date\.timezone.*/date\.timezone = UTC/" /etc/php7/php.ini \
   && rm -rf /var/cache/apk/* /var/www/* /tmp/*
 
-ENV SYSPASS_VERSION="3.0.0.18110201-beta"
+ENV SYSPASS_VERSION="3.0.0.18112601-rc5"
 
 RUN apk --update --no-cache add -t build-dependencies \
     git \
@@ -67,8 +67,12 @@ RUN apk --update --no-cache add -t build-dependencies \
   && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer \
   && git clone --branch ${SYSPASS_VERSION} https://github.com/nuxsmin/sysPass.git /var/www \
   && chown -R syspass. /var/www \
-  && su - syspass -c "composer update nothing --no-ansi --working-dir=/var/www" \
   && su - syspass -c "composer install --no-dev --no-interaction --no-ansi --working-dir=/var/www" \
+  && sed -i "s/define('CONFIG_PATH'.*/define('CONFIG_PATH', '\/data\/config');/" /var/www/lib/Base.php \
+  && sed -i "s/define('BACKUP_PATH'.*/define('BACKUP_PATH', '\/data\/backup');/" /var/www/lib/Base.php \
+  && sed -i "s/define('CACHE_PATH'.*/define('CACHE_PATH', '\/data\/cache');/" /var/www/lib/Base.php \
+  && chown -R syspass. /var/www \
+  && chown -R nginx. /var/lib/nginx /var/log/nginx /var/log/php7 /var/tmp/nginx \
   && apk del build-dependencies \
   && rm -rf /var/cache/apk/* \
     /var/www/.composer \
@@ -83,12 +87,7 @@ COPY entrypoint.sh /entrypoint.sh
 COPY assets /
 
 RUN mkdir -p /var/log/supervisord \
-  && chmod a+x /entrypoint.sh \
-  && sed -i "s/define('CONFIG_PATH'.*/define('CONFIG_PATH', '\/data\/config');/" /var/www/lib/Base.php \
-  && sed -i "s/define('BACKUP_PATH'.*/define('BACKUP_PATH', '\/data\/backup');/" /var/www/lib/Base.php \
-  && sed -i "s/define('CACHE_PATH'.*/define('CACHE_PATH', '\/data\/cache');/" /var/www/lib/Base.php \
-  && chown -R syspass. /var/www \
-  && chown -R nginx. /var/lib/nginx /var/log/nginx /var/log/php7 /var/tmp/nginx
+  && chmod a+x /entrypoint.sh
 
 EXPOSE 80
 WORKDIR /var/www
