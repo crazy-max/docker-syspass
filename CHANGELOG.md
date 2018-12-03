@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.0.0.18112601-RC2 (2018/12/03)
+## 3.0.0.18112601-RC1 (2018/12/03)
 
 * Upgrade to sysPass 3.0.0.18112601-rc5
 * Optimize layers
