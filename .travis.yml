@@ -5,7 +5,7 @@ services:
 
 env:
   global:
-    - VERSION=3.0.0.18110201
+    - VERSION=3.0.0.18112601
     - DOCKER_LOGIN=crazymax
     - DOCKER_USERNAME=crazymax
     - DOCKER_REPONAME=syspass
