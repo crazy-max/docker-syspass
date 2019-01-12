@@ -55,7 +55,7 @@ RUN apk --update --no-cache add \
   && sed -i -e "s/;date\.timezone.*/date\.timezone = UTC/" /etc/php7/php.ini \
   && rm -rf /var/cache/apk/* /var/www/* /tmp/*
 
-ENV SYSPASS_VERSION="3.0.0.18112601-rc5"
+ENV SYSPASS_VERSION="3.0.0.18126201"
 
 RUN apk --update --no-cache add -t build-dependencies \
     git \
@@ -89,7 +89,7 @@ COPY assets /
 RUN mkdir -p /var/log/supervisord \
   && chmod a+x /entrypoint.sh
 
-EXPOSE 80
+EXPOSE 8000
 WORKDIR /var/www
 VOLUME [ "/data" ]
 

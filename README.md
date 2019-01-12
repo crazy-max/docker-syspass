@@ -45,7 +45,7 @@ If you are interested, [check out](https://hub.docker.com/r/crazymax/) my other 
 
 ### Ports
 
-* `80` : HTTP port
+* `8000` : HTTP port
 
 ## Use this image
 
@@ -74,7 +74,7 @@ docker run -d --name syspass-db \
 ```
 
 ```bash
-docker run -d -p 80:80 --name syspass \
+docker run -d -p 8000:8000 --name syspass \
   --link syspass-db \
   -v $(pwd)/data:/data \
   crazymax/syspass:latest
