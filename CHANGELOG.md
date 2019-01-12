@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.0.0.18126201-RC1 (2018/12/03)
+## 3.0.0.18126201-RC1 (2019/01/12)
 
 * Upgrade to sysPass 3.0.0.18126201
 * Bind to unprivileged port : `8000`
