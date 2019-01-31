@@ -19,7 +19,7 @@ If you are interested, [check out](https://hub.docker.com/r/crazymax/) my other 
 
 ### Included
 
-* Alpine Linux 3.8, Nginx, PHP 7.2
+* Alpine Linux 3.9, Nginx, PHP 7.2
 * OPCache enabled to store precompiled script bytecode in shared memory
 * Configuration and backups stored in a dedicated folder
 
