@@ -55,7 +55,7 @@ RUN apk --update --no-cache add \
   && sed -i -e "s/;date\.timezone.*/date\.timezone = UTC/" /etc/php7/php.ini \
   && rm -rf /var/cache/apk/* /var/www/* /tmp/*
 
-ENV SYSPASS_VERSION="3.0.0.18126201"
+ENV SYSPASS_VERSION="3.0.5.19020701"
 
 RUN apk --update --no-cache add -t build-dependencies \
     git \
