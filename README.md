@@ -7,8 +7,8 @@
   <a href="https://hub.docker.com/r/crazymax/syspass/"><img src="https://img.shields.io/docker/pulls/crazymax/syspass.svg?style=flat-square" alt="Docker Pulls"></a>
   <a href="https://quay.io/repository/crazymax/syspass"><img src="https://quay.io/repository/crazymax/syspass/status?style=flat-square" alt="Docker Repository on Quay"></a>
   <a href="https://www.codacy.com/app/crazy-max/docker-syspass"><img src="https://img.shields.io/codacy/grade/583373a748d24c868a4809caace825bd.svg?style=flat-square" alt="Code Quality"></a>
-  <br /><a href="https://www.patreon.com/crazymax"><img src="https://img.shields.io/badge/donate-patreon-fb664e.svg?style=flat-square" alt="Support me on Patreon"></a>
-  <a href="https://www.paypal.me/crazyws"><img src="https://img.shields.io/badge/donate-paypal-7057ff.svg?style=flat-square" alt="Donate Paypal"></a>
+  <br /><a href="https://www.patreon.com/crazymax"><img src="https://img.shields.io/badge/donate-patreon-f96854.svg?logo=patreon&style=flat-square" alt="Support me on Patreon"></a>
+  <a href="https://www.paypal.me/crazyws"><img src="https://img.shields.io/badge/donate-paypal-00457c.svg?logo=paypal&style=flat-square" alt="Donate Paypal"></a>
 </p>
 
 ## About
@@ -20,14 +20,8 @@ If you are interested, [check out](https://hub.docker.com/r/crazymax/) my other 
 
 ## Features
 
-### Included
-
-* Alpine Linux 3.9, Nginx, PHP 7.2
 * OPCache enabled to store precompiled script bytecode in shared memory
 * Configuration and backups stored in a dedicated folder
-
-### From docker-compose
-
 * [Traefik](https://github.com/containous/traefik-library-image) as reverse proxy and creation/renewal of Let's Encrypt certificates
 * [MariaDB](https://github.com/docker-library/mariadb) image as database instance
 
